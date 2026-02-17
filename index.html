@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Случайная картинка - Версия 1</title>
+    <title>Случайная картинка - Версия 2</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,49 +11,93 @@
             padding: 20px;
             background-color: #f0f0f0;
         }
-        h1 {
-            color: #333;
-        }
+        h1 { color: #333; }
         #imageContainer {
             margin: 20px auto;
             max-width: 600px;
+            min-height: 400px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         img {
             max-width: 100%;
+            max-height: 500px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        button {
+        .button {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
             border: none;
             border-radius: 5px;
             margin: 10px;
+            color: white;
         }
-        button:hover {
-            background-color: #45a049;
-        }
+        .update-btn { background-color: #4CAF50; }
+        .update-btn:hover { background-color: #45a049; }
+        .download-btn { background-color: #2196F3; }
+        .download-btn:hover { background-color: #0b7dda; }
     </style>
 </head>
 <body>
     <h1>🎲 Генератор случайных картинок</h1>
-    <h2>Версия 1</h2>
+    <h2>Версия 2</h2>
     
     <div id="imageContainer">
-        <img id="randomImage" src="https://picsum.photos/600/400?random=1" alt="Случайное изображение">
+        <img id="randomImage" src="" alt="Случайное изображение">
     </div>
     
-    <button onclick="updateImage()">🔄 Показать другую картинку</button>
+    <button class="button update-btn" onclick="updateImage()">🔄 Показать другую картинку</button>
+    <button class="button download-btn" onclick="downloadImage()">💾 Скачать картинку</button>
     
     <script>
+        // Разные источники картинок (работающие в РФ)
+        const imageSources = [
+            () => `https://placehold.co/600x400/4CAF50/white?text=Image+${Math.floor(Math.random() * 1000)}`,
+            () => `https://placehold.co/600x400/2196F3/white?text=Random+${Math.floor(Math.random() * 1000)}`,
+            () => `https://placehold.co/600x400/FF9800/white?text=Picture+${Math.floor(Math.random() * 1000)}`,
+            () => `https://placehold.co/600x400/9C27B0/white?text=Photo+${Math.floor(Math.random() * 1000)}`,
+            () => `https://placehold.co/600x400/F44336/white?text=Image+${Math.floor(Math.random() * 1000)}`
+        ];
+        
+        let currentImageIndex = 0;
+        let currentImageUrl = '';
+        
         function updateImage() {
-            const randomNum = Math.floor(Math.random() * 10000);
-            document.getElementById('randomImage').src = 
-                `https://picsum.photos/600/400?random=${randomNum}`;
+            currentImageIndex = (currentImageIndex + 1) % imageSources.length;
+            const generator = imageSources[currentImageIndex];
+            currentImageUrl = generator();
+            
+            const img = document.getElementById('randomImage');
+            img.src = currentImageUrl;
+            img.dataset.url = currentImageUrl;
         }
+        
+        function downloadImage() {
+            const img = document.getElementById('randomImage');
+            
+            if (!img.src || img.src === window.location.href) {
+                alert('Сначала покажите картинку!');
+                return;
+            }
+            
+            // Создаем ссылку для скачивания
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = `random-image-${Date.now()}.png`;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Загружаем первую картинку при старте
+        window.onload = updateImage;
     </script>
 </body>
 </html>
