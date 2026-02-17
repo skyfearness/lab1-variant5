@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Случайная картинка - Версия 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        #imageContainer {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎲 Генератор случайных картинок</h1>
+    <h2>Версия 1</h2>
+    
+    <div id="imageContainer">
+        <img id="randomImage" src="https://picsum.photos/600/400?random=1" alt="Случайное изображение">
+    </div>
+    
+    <button onclick="updateImage()">🔄 Показать другую картинку</button>
+    
+    <script>
+        function updateImage() {
+            const randomNum = Math.floor(Math.random() * 10000);
+            document.getElementById('randomImage').src = 
+                `https://picsum.photos/600/400?random=${randomNum}`;
+        }
+    </script>
+</body>
+</html>
